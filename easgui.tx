@@ -1,0 +1,31 @@
+Program:
+    commands*=Commands
+;
+
+Commands:
+    ImportFunction | CreateWindow | CreateButton | CreateInputs    
+;
+
+CreateWindow:
+    'CREATE WIN' NameID=ID 'SIZE' coor1*=INT[','] ';'
+;
+
+ImportFunction:
+    'IMPORT FUN' functionName=ID 'FROM' fileName=ID 'NAMED' newFunctionName=ID ';'
+;
+
+CreateButton:
+    'ADD FUNCTION' functionName=ID 'WITH BUTTON' buttonName=ID ';'
+;
+
+CreateInputs:
+    'PARAMS' parameter+=Type[','] ';'
+;
+
+InputType:
+    'DECIMALINPUT' | 'INTINPUT' | 'OUTPUT'
+;
+
+Type:
+    InputType inputName=ID
+;

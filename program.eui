@@ -1,0 +1,12 @@
+IMPORT FUN calTax FROM file1 NAMED suma;
+CREATE WIN
+    Taxcalculator SIZE 600,200;
+    
+PARAMS 
+    DECIMALINPUT taxRate,
+    DECIMALINPUT income,
+    DECIMALINPUT extra,
+    OUTPUT result;
+    
+ADD FUNCTION 
+    suma WITH BUTTON Calcular;
