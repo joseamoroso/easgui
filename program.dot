@@ -1,0 +1,30 @@
+
+    digraph textX {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+2216229009608 -> 2216229024328 [label="commands:0" arrowtail=diamond dir=both]
+2216229024328[label="{:ImportFunction|+functionName:str='calTax'\l+fileName:str='file1'\l+newFunctionName:str='suma'\l}"]
+2216229009608 -> 2216229024392 [label="commands:1" arrowtail=diamond dir=both]
+2216229024392[label="{:CreateWindow|+NameID:str='Taxcalculator'\lcoor1:list=[600,200]\l}"]
+2216229009608 -> 2216229024520 [label="commands:2" arrowtail=diamond dir=both]
+2216229024520 -> 2216229024712 [label="parameter:0" arrowtail=diamond dir=both]
+2216229024712[label="{:Input|+inputName:str='taxRate'\l}"]
+2216229024520 -> 2216229024776 [label="parameter:1" arrowtail=diamond dir=both]
+2216229024776[label="{:Input|+inputName:str='income'\l}"]
+2216229024520 -> 2216229024904 [label="parameter:2" arrowtail=diamond dir=both]
+2216229024904[label="{:Input|+inputName:str='extra'\l}"]
+2216229024520 -> 2216229024968 [label="parameter:3" arrowtail=diamond dir=both]
+2216229024968[label="{:Input|+inputName:str='result'\l}"]
+2216229024520[label="{:CreateFunction|+functionName:str='suma'\l+buttonName:str='Calcular'\l}"]
+2216229009608[label="{:Program|}"]
+
+}
