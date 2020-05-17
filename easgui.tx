@@ -20,7 +20,7 @@ CreateFunction:
 ;
 
 Input:
-    InputType inputName=ID
+    inputType=InputType inputName=ID
 ;
 
 InputType:
@@ -28,5 +28,5 @@ InputType:
 ;
 
 Comment:
-  /\/\/.*$/
+  /\#.*$/ | /\/\*(.|\n)*?\*\//
 ;
