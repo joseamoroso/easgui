@@ -1,24 +1,35 @@
-IMPORT FUN calTax FROM file1 NAMED suma;
-IMPORT FUN suma FROM file1 NAMED suma2;
+IMPORT FUN calTax FROM file1 NAMED CalcularTax;
+IMPORT FUN suma FROM file1 NAMED Suma;
+IMPORT FUN arrAvg FROM file1 NAMED SquareList;
 
 
 CREATE WIN
-    Taxcalculator SIZE 500,300;
+    Taxcalculator SIZE 300,550;
 
 PARAMS 
     DECIMALINPUT taxRate,
     DECIMALINPUT income,
     DECIMALINPUT extra,
     OUTPUT result;
-    
+
 ADD FUNCTION 
-    suma WITH BUTTON Calcular;
+    CalcularTax WITH BUTTON CalcularT;
 
 PARAMS 
     DECIMALINPUT x1,
     DECIMALINPUT y1,
-    OUTPUT result2;
+    OUTPUT Suma,
+    OUTPUT Multiplicacion;
+
     
 ADD FUNCTION 
-    suma2 WITH BUTTON Calcular2;
+    Suma WITH BUTTON CalcularS;
+
+PARAMS 
+    LISTSTRINGINPUT Arreglo,
+    OUTPUT Cuadrado;
+
+    
+ADD FUNCTION 
+    SquareList WITH BUTTON GO;
 
