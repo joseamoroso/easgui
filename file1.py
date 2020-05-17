@@ -8,14 +8,21 @@ from inspect import signature
 
 
 def suma(x,y):
-     return x+y
+    print("Funcion Suma")
+    return x+y,x*y
 
 def calTax(inc,tax,taxEx):
+    print("Funcion Taxes")
     return (inc*(tax/100))-taxEx
 
+def conc(text):
+    return("Hola "+text)
  
-def sumaLocal():
-    print("Hola")
+def arrAvg(array):
+    text = ""
+    for val in array:
+        text+=val +" " 
+    return text
 
 # a = suma
 # lista=[]
