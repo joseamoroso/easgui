@@ -1,5 +1,5 @@
 Program:
-    commands*=Commands
+    commands+=Commands
 ;
 
 Commands:
@@ -7,7 +7,7 @@ Commands:
 ;
 
 CreateWindow:
-    'CREATE WIN' NameID=ID 'SIZE' coor1*=INT[','] ';'
+    'CREATE WIN' windowID=ID ('SIZE' coor*=INT[','])? ';'
 ;
 
 ImportFunction:
