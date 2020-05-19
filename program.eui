@@ -4,7 +4,8 @@ IMPORT FUN arrAvg FROM file1 NAMED SquareList;
 
 
 CREATE WIN
-    Taxcalculator SIZE 300,550;
+    Taxcalculator
+    SIZE 450;
 
 PARAMS 
     DECIMALINPUT taxRate,
@@ -16,8 +17,8 @@ ADD FUNCTION
     CalcularTax WITH BUTTON CalcularT;
 
 PARAMS 
-    DECIMALINPUT x1,
-    DECIMALINPUT y1,
+    DECIMALINPUT y,
+    DECIMALINPUT y,
     OUTPUT Suma,
     OUTPUT Multiplicacion;
 
@@ -26,7 +27,7 @@ ADD FUNCTION
     Suma WITH BUTTON CalcularS;
 
 PARAMS 
-    LISTSTRINGINPUT Arreglo,
+    LISTINTINPUT Arreglo,
     OUTPUT Cuadrado;
 
     
