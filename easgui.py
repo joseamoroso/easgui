@@ -76,7 +76,8 @@ def wrap(func,args):
         if value[1] == 'OUTPUT':
              outlist.append(value[0])
     
-    result = func(*tuple(argsList)) 
+    result = func(*tuple(argsList))
+    print(result)
     
     if type(result)==tuple:
         if len(outlist)<=1: 
@@ -92,10 +93,12 @@ def wrap(func,args):
             return
         else:
             for i in range(len(outlist)):
+                outlist[i].configure(state="normal")
                 outlist[i].delete(0,"end")
                 outlist[i].insert(0,str(result[i]))
                 
     if len(outlist)==1:
+        outlist[0].configure(state="normal")
         outlist[0].delete(0,"end")
         outlist[0].insert(0,str(result))
 
