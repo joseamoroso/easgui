@@ -19,10 +19,11 @@ def conc(text):
     return("Hola "+text)
  
 def arrAvg(array):
-    text = ""
-    for val in array:
-        text+=val +" " 
-    return text
+    # text = ""
+    # for val in array:
+    #     text+=val +" " 
+    # return text
+    return [i**2 for i in array]
 
 # a = suma
 # lista=[]
