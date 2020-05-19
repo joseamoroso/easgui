@@ -6,12 +6,47 @@ Created on Thu May 14 01:06:33 2020
 """
 
 
-from textx import metamodel_from_file
-from tkinter import Tk,Button,Label,Entry,Canvas,LEFT, RIGHT,HORIZONTAL,BOTH,TOP,BOTTOM,X
+from textx import metamodel_from_file,TextXSyntaxError,TextXSemanticError
+from tkinter import Tk,Button,Label,Entry,Canvas,LEFT, RIGHT,HORIZONTAL,BOTH,TOP,BOTTOM,X,Frame,RAISED
 from tkinter import ttk
 from functools import partial
+import inspect
 
-#REVISAR SINTAXIS DE WRAP, IGUAL QUE BORRE CONTENIDO ANTES DE CALCULAR UNO NUEVO        
+class bcolors:
+    HEADER = '\u001b[35;1m'
+    OKBLUE = '\u001b[34;1m'
+    OKGREEN = '\u001b[32;1m'
+    RED = '\u001b[31;1m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+    
+def procMessage(message, color , line, col, tupleInput):
+    messageColor = "\n"+message +"\n\t" + color+tupleInput[1]+" "+tupleInput[0]+"\033[0m" + "\nIn:\n\t[line:"+str(line)+", col:"+str(col)+"]" 
+    return messageColor
+    
+def check_some_semantics(model, metamodel):
+    modelCommands = model.commands
+    inputIDList=[]
+    for command in modelCommands:
+        if command.__class__.__name__ == "CreateFunction":
+            #CHECK REPEATED IDS -> INPUTS
+            for inputs in command.parameter:
+                inputValue = inputs.inputName
+                inputType = inputs.inputType
+                if inputValue in inputIDList:
+                    line,col = model._tx_parser.pos_to_linecol(command._tx_position)
+                    lineInput,colInput = model._tx_parser.pos_to_linecol(inputs._tx_position)
+                    messageError ="Repeated inputs IDs, check it is not used before."
+                    messageComp = inputValue,inputType
+                    message = procMessage(messageError,bcolors.RED,lineInput,colInput,messageComp)
+                    raise TextXSemanticError(message,line=line,col=col,filename=model._tx_filename)
+                inputIDList.append((inputValue))
+        
+
 def wrap(func,args):
     # print("\n"+("#"*56))
     # print(args)
@@ -63,6 +98,7 @@ def wrap(func,args):
     if len(outlist)==1:
         outlist[0].delete(0,"end")
         outlist[0].insert(0,str(result))
+
         
 class GUI:
     def __init__(self,master):
@@ -90,18 +126,31 @@ class GUI:
                 
     
             if c.__class__.__name__ == "CreateWindow": 
-                self.master.title(c.NameID)
-                newSize = "{}x{}".format(c.coor1[0],c.coor1[1])
-                # self.canvas = Canvas(self.master, width=c.coor1[0],
-                #             height=c.coor1[1], bg = "black")
-                # self.canvas.pack()
-                self.master.geometry(newSize)
+                try:
+                    self.master.title(c.windowID)
+                except:
+                    pass
+                try:
+                    newSize = "{}x{}".format(c.coor[0],c.coor[1])
+                    self.master.geometry(newSize)
+                except:
+                    pass
+                try:
+                    newSize = "{}x{}".format(c.coor[0],c.coor[0])
+                    self.master.geometry(newSize)
+                except:
+                    pass
 
 
             if c.__class__.__name__ == "CreateFunction":
+                # raise TextXSyntaxError("Putito")
                 self.inputs = {}
                 self.listValues = None
                 self.button=None
+                #Create frame for each function
+                self.frame = Frame(self.master, relief=RAISED, borderwidth=1)
+                self.frame.pack(fill=BOTH, expand=True)
+
                 #Insert line horizontal
                 if (self.functionFlag):
                     self.separ = ttk.Separator(self.master, orient=HORIZONTAL)
@@ -111,13 +160,20 @@ class GUI:
                 ########################## Create inputs #############################
                 ######################################################################
                 for inputs in c.parameter:
-                    self.label = Label(self.master, text=inputs.inputName+':', anchor='w')
-                    self.entry = Entry(self.master)
+                    self.frameInner = Frame(self.frame, relief=RAISED)
+                    self.frameInner.pack(fill=BOTH, expand=True)
                     self.inputType = inputs.inputType
+
+                    if self.inputType == 'OUTPUT':
+                        self.label = Label(self.frameInner, text=inputs.inputName+':', anchor='w',font=("Calibri", 10, "bold underline"))
+                        self.entry = Entry(self.frameInner,state='disabled')
+                    else:
+                        self.label = Label(self.frameInner, text=inputs.inputName+':', anchor='w')
+                        self.entry = Entry(self.frameInner)
+                        
                     self.inputs[inputs.inputName]=(self.label,(self.entry,self.inputType))
-                    # self.canvas.create_window(self.canvasPosition[0],self.canvasPosition[1], window=self.entry)
-                    self.label.pack(side=TOP,  fill=X,padx=5, pady=5)
-                    self.entry.pack(side=TOP, expand=True)
+                    self.label.pack(side=LEFT,padx=5, pady=5)
+                    self.entry.pack(side=LEFT,fill=X,expand=True,padx=10)
                 ######################################################################
                 ################### Create button with function ######################
                 ######################################################################
@@ -125,7 +181,7 @@ class GUI:
                 for elem in self.inputs.values():
                     self.tempListValues.append(elem[1])
                 self.listValues = tuple(self.tempListValues)
-                self.button = Button(self.master, text=c.buttonName)
+                self.button = Button(self.frame, text=c.buttonName)
                 # self.button.configure(command=lambda: wrap(self.functions[c.functionName],self.listValues))
                 self.button.configure(command=partial(wrap,self.functions[c.functionName],self.listValues))
                 self.button.pack(pady=5)
@@ -137,7 +193,10 @@ class GUI:
 
 gui_mm = metamodel_from_file('easgui.tx')
 
+gui_mm.register_model_processor(check_some_semantics)
+
 gui_model = gui_mm.model_from_file('program.eui')
+
 
 
 root = Tk()
