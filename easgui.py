@@ -6,39 +6,61 @@ Created on Thu May 14 01:06:33 2020
 """
 
 
-from textx import metamodel_from_file,TextXSyntaxError,TextXSemanticError
-from tkinter import Tk,Button,Label,Entry,Canvas,LEFT, RIGHT,HORIZONTAL,BOTH,TOP,BOTTOM,X,Frame,RAISED
+from textx import metamodel_from_file,TextXSemanticError
+from tkinter import Tk,Button,Label,Entry,LEFT,HORIZONTAL,BOTH,TOP,X,Frame,RAISED
 from tkinter import ttk
 from functools import partial
 import inspect
+import numpy as np
+import sys
 
 class bcolors:
     HEADER = '\u001b[35;1m'
     OKBLUE = '\u001b[34;1m'
     OKGREEN = '\u001b[32;1m'
-    RED = '\u001b[31;1m'
+    RED = '\033[91m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
 
-    
+color_flag = True    
 def procMessage(message, color , line, col, tupleInput):
-    messageColor = "\n"+message +"\n\t" + color+tupleInput[1]+" "+tupleInput[0]+"\033[0m" + "\nIn:\n\t[line:"+str(line)+", col:"+str(col)+"]" 
+    if color_flag:
+        messageColor = "\n"+message +"\n\t" + color+tupleInput[1]+" "+tupleInput[0]+"\033[0m" + "\nIn:\n\t[line:"+str(line)+", col:"+str(col)+"]" 
+    else:
+        messageColor = "\n"+message +"\n\t" +tupleInput[1]+" "+tupleInput[0] + "\nIn:\n\t[line:"+str(line)+", col:"+str(col)+"]" 
+        
     return messageColor
     
-def check_some_semantics(model, metamodel):
+def checkSemantics(model, metamodel):
     modelCommands = model.commands
     inputIDList=[]
     for command in modelCommands:
+        line,col = model._tx_parser.pos_to_linecol(command._tx_position)
+        # if command.__class__.__name__ == "ImportFunction":
+        #     try:
+        #         package = command.fileName
+        #         name = command.functionName
+        #     #se puede hacer un propio import primero del modeulo y despues de funciones para no usar importmodule de python
+        #     #semantico o runtime?
+        #         imported = getattr(__import__(package, fromlist=[name]), name)
+        #     # except ModuleNotFoundError:
+        #     #     raise ModuleNotFoundError("sss")
+        #     except ImportError:
+        #         print("no function")
+        #     except AttributeError as e:
+        #         raise ImportError(name + "does not exist in "+package)
+        #     except:
+        #         pass
+            
         if command.__class__.__name__ == "CreateFunction":
             #CHECK REPEATED IDS -> INPUTS
             for inputs in command.parameter:
                 inputValue = inputs.inputName
                 inputType = inputs.inputType
                 if inputValue in inputIDList:
-                    line,col = model._tx_parser.pos_to_linecol(command._tx_position)
                     lineInput,colInput = model._tx_parser.pos_to_linecol(inputs._tx_position)
                     messageError ="Repeated inputs IDs, check it is not used before."
                     messageComp = inputValue,inputType
@@ -55,10 +77,22 @@ def wrap(func,args):
     for value in args:
         # print(value.get()+"\n")
         if value[1] == 'INTINPUT':
-             argsList.append(int(value[0].get()))
+            try:
+                argsList.append(int(value[0].get()))
+            except:
+                raise RuntimeError("INTINPUT data type declared but another type was used")
+        if value[1] == 'MATRIXINPUT':
+            tempList=[]
+            tempMatrix = value[0].get().split(';')
+            for sublist in tempMatrix:
+                tempSplit = sublist.split(',')
+                tempSplit = [int(x) for x in tempSplit]
+                tempList.append(tempSplit)
+            tempList = np.array(tempList)
+            # print(tempList)
+            argsList.append(tempList)
         if value[1] == 'DECIMALINPUT':
              argsList.append(float(value[0].get()))
-             ###################################################
         if value[1] == 'LISTINTINPUT':
             tempList = value[0].get().split(',')
             tempList = [int(i) for i in tempList]
@@ -77,7 +111,7 @@ def wrap(func,args):
              outlist.append(value[0])
     
     result = func(*tuple(argsList))
-    print(result)
+    # print(result)
     
     if type(result)==tuple:
         if len(outlist)<=1: 
@@ -105,16 +139,13 @@ def wrap(func,args):
         
 class GUI:
     def __init__(self,master):
-        self.co=0
         self.functions = {}
         self.master = master
         self.functionFlag = False
         self.allButton ={}
-        # self.canvasPosition = (50,50)
         # Initial size of windows is (500,500) and name easgui
         master.title("EASGUI")
-        # self.canvas = Canvas(self.master, width=500,
-        #                     height=500, bg = "black")
+
         master.geometry("500x500")
 
 
@@ -191,19 +222,24 @@ class GUI:
                 ######################################################################
             
 
-            
+def main(debug=False):
 
+    
+    gui_mm = metamodel_from_file('easgui.tx')
+    
+    gui_mm.register_model_processor(checkSemantics)
+    
+    
+    gui_model = gui_mm.model_from_file('program.eui')
+    # gui_model = gui_mm.model_from_file(str(sys.argv[1]))
+    
+    
+    
+    root = Tk()
+    my_gui = GUI(root)
+    my_gui.interpret(gui_model)
+    
+    root.mainloop()
 
-gui_mm = metamodel_from_file('easgui.tx')
-
-gui_mm.register_model_processor(check_some_semantics)
-
-gui_model = gui_mm.model_from_file('program.eui')
-
-
-
-root = Tk()
-my_gui = GUI(root)
-my_gui.interpret(gui_model)
-
-root.mainloop()
+if __name__ == "__main__":
+    main()

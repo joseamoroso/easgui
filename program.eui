@@ -1,10 +1,10 @@
 IMPORT FUN calTax FROM file1 NAMED CalcularTax;
 IMPORT FUN suma FROM file1 NAMED Suma;
 IMPORT FUN arrAvg FROM file1 NAMED SquareList;
+IMPORT FUN covMatrix FROM file1 NAMED CalcularCovarianza;
 
 
-CREATE WIN
-    Taxcalculator
+CREATE WIN Taxcalculator
     SIZE 450;
 
 PARAMS 
@@ -17,8 +17,8 @@ ADD FUNCTION
     CalcularTax WITH BUTTON CalcularT;
 
 PARAMS 
-    DECIMALINPUT y,
-    DECIMALINPUT y,
+    INTINPUT x,
+    INTINPUT y,
     OUTPUT Suma,
     OUTPUT Multiplicacion;
 
@@ -27,10 +27,19 @@ ADD FUNCTION
     Suma WITH BUTTON CalcularS;
 
 PARAMS 
+    MATRIXINPUT matrixX,
+    OUTPUT CovMatrix;
+
+    
+ADD FUNCTION 
+    CalcularCovarianza WITH BUTTON CalcularCov;
+
+/*
+PARAMS 
     LISTINTINPUT Arreglo,
     OUTPUT Cuadrado;
 
     
 ADD FUNCTION 
     SquareList WITH BUTTON GO;
-
+*/
