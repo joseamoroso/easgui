@@ -4,9 +4,10 @@ IMPORT FUN arrAvg FROM file1 NAMED SquareList;
 IMPORT FUN covMatrix FROM file1 NAMED CalcularCovarianza;
 
 
-CREATE WIN Taxcalculator
-    SIZE 450;
+CREATE WIN toll 
+    SIZE;
 
+    
 PARAMS 
     DECIMALINPUT taxRate,
     DECIMALINPUT income,
@@ -34,7 +35,7 @@ PARAMS
 ADD FUNCTION 
     CalcularCovarianza WITH BUTTON CalcularCov;
 
-/*
+
 PARAMS 
     LISTINTINPUT Arreglo,
     OUTPUT Cuadrado;
@@ -42,4 +43,4 @@ PARAMS
     
 ADD FUNCTION 
     SquareList WITH BUTTON GO;
-*/
+

@@ -7,7 +7,7 @@ Commands:
 ;
 
 CreateWindow:
-    'CREATE WIN' windowID=ID ('SIZE' coor*=INT[','])? ';'
+    'CREATE WIN' windowID=ID? ('SIZE' coor*=INT[','])? ';'
 ;
 
 ImportFunction:
