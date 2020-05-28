@@ -1,2 +1,12 @@
 
 *.pyc
+tx_easgui.egg-info/dependency_links.txt
+tx_easgui.egg-info/entry_points.txt
+tx_easgui.egg-info/PKG-INFO
+tx_easgui.egg-info/requires.txt
+tx_easgui.egg-info/SOURCES.txt
+tx_easgui.egg-info/top_level.txt
+Model_parse_tree.dot
+program.dot
+program.dot.png
+program.dot
