@@ -1,5 +1,6 @@
 from errorMessages import TextXSemanticError, TextXRuntimeError
-
+import numpy as np
+import inspect 
 class bcolors:
     HEADER = '\u001b[35;1m'
     BLUE = '\u001b[34;1m'
@@ -32,12 +33,20 @@ def wrap(func,args):
     for value in args:
         # print(value.get()+"\n")
         #ARREGLAR PARA VERIFICAR CAMPO VACIOS DE TODOS ANTES
-        if value[0].get()=='' and value[1] != 'OUTPUT':
-            lineInput,colInput = value[2]
-            messageError ="Empy data on entry defined at:\n\t{} {}".format(value[1],value[3])
-            message = procMessage(messageError,bcolors.BLUE,lineInput,colInput)
-            raise TextXRuntimeError(message,line=lineInput,col=colInput)
-        
+        if value[1] != "BOOLINPUT":
+            if value[0].get()=='' and value[1] != 'OUTPUT':
+                lineInput,colInput = value[2]
+                messageError ="Empy data on entry defined at:\n\t{} {}".format(value[1],value[3])
+                message = procMessage(messageError,bcolors.BLUE,lineInput,colInput)
+                raise TextXRuntimeError(message,line=lineInput,col=colInput)
+      
+        if value[1] == 'BOOLINPUT':
+            # print(inspect.getmembers(value[0].variable))
+            if "selected" in value[0].state():
+                argsList.append(True)
+            else:
+                argsList.append(False)
+                
         if value[1] == 'INTINPUT':
             try:
                 if "." in value[0].get():

@@ -8,7 +8,7 @@ Created on Thu May 14 01:06:33 2020
 
 from textx import metamodel_from_file
 from errorMessages import TextXSemanticError, TextXRuntimeError
-from tkinter import Tk,Button,Label,Entry,LEFT,HORIZONTAL,BOTH,TOP,X,Frame,RAISED
+from tkinter import Tk,Button,Label,Entry,LEFT,HORIZONTAL,BOTH,TOP,X,Frame,RAISED,Checkbutton,IntVar
 from tkinter import ttk
 from functionCaller import wrap, procMessage,bcolors,underlineStr
 from functools import partial
@@ -108,15 +108,32 @@ class GUI:
                     
                     self.inputType = inputs.inputType
                     if self.inputType == 'OUTPUT':
+                        print("-"*10)
                         self.label = Label(self.frameInner, text=inputs.inputName+':', anchor='w',font=("Calibri", 10, "bold underline"))
                         self.entry = Entry(self.frameInner,state='disabled')
+                        self.label.pack(side=LEFT,padx=5, pady=5)
+                        self.entry.pack(side=LEFT,fill=X,expand=True,padx=10)
+                        self.tempListValues.append((self.entry,self.inputType,self.inputPosition,inputs.inputName))
+
+                        
+                    elif self.inputType == 'BOOLINPUT':
+                        self.label = Label(self.frameInner, text=inputs.inputName+':', anchor='w')
+                        self.label.pack(side=LEFT,padx=5, pady=5)
+                        self.checkvar = IntVar() 
+                        self.Checkbutton = ttk.Checkbutton(self.frameInner)
+                        self.Checkbutton.state(['!alternate'])
+                        self.Checkbutton.pack(side=LEFT,fill=X,padx=10)
+                        self.tempListValues.append((self.Checkbutton,self.inputType,self.inputPosition,inputs.inputName))
+
                     else:
                         self.label = Label(self.frameInner, text=inputs.inputName+':', anchor='w')
                         self.entry = Entry(self.frameInner)
-                    
-                    self.tempListValues.append((self.entry,self.inputType,self.inputPosition,inputs.inputName))
-                    self.label.pack(side=LEFT,padx=5, pady=5)
-                    self.entry.pack(side=LEFT,fill=X,expand=True,padx=10)
+                        self.label.pack(side=LEFT,padx=5, pady=5)
+                        self.entry.pack(side=LEFT,fill=X,expand=True,padx=10)
+                        self.tempListValues.append((self.entry,self.inputType,self.inputPosition,inputs.inputName))
+
+
+
                 ######################################################################
                 ################### Create button with function ######################
                 ######################################################################

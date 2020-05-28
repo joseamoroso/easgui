@@ -7,8 +7,8 @@ Created on Thu May 14 02:19:04 2020
 from inspect import signature
 import numpy as np
 
-def suma(x,y):
-    # print("Funcion Suma")
+def suma(x,y,boola):
+    print(boola)
     return x+y,x*y
 
 def calTax(inc,tax,taxEx):
