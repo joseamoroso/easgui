@@ -1,0 +1,64 @@
+
+    digraph textX {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+2445266515976[ label="{Program|}"]
+
+2445266548072[ label="{*Commands|}"]
+
+2445266546184[ label="{CreateWindow|+windowID:ID\lcoor:list[INT]\l}"]
+
+2445266528248[ label="{ImportFunction|+functionName:ID\l+fileName:ID\l+newFunctionName:ID\l}"]
+
+2445266550904[ label="{CreateFunction|+functionName:ID\l+buttonName:ID\l}"]
+
+2445266533912[ label="{Input|+inputType:InputType\l+inputName:ID\l}"]
+
+2445266513144[ label="{InputType|STRINGINPUT\|DECIMALINPUT\|INTINPUT\|OUTPUT\|LISTINTINPUT\|LISTIDECIMALINPUT\|LISTSTRINGINPUT\|MATRIXINPUT\|BOOLINPUT}"]
+
+2445266556568[ label="{Comment|\\#.*$\|\\/\\*(.\|\\n)*\?\\*\\/}"]
+
+2445266532024[ label="{ID|}"]
+
+2445266532968[ label="{STRING|}"]
+
+2445266520696[ label="{BOOL|}"]
+
+2445266524472[ label="{INT|}"]
+
+2445266518808[ label="{FLOAT|}"]
+
+2445266526360[ label="{STRICTFLOAT|}"]
+
+2445266540520[ label="{NUMBER|}"]
+
+2445266534856[ label="{BASETYPE|}"]
+
+2445266545240[ label="{*OBJECT|}"]
+
+
+
+2445266515976 -> 2445266548072[arrowtail=diamond, dir=both, headlabel="commands 1..*"]
+2445266548072 -> 2445266528248 [dir=back]
+2445266548072 -> 2445266546184 [dir=back]
+2445266548072 -> 2445266550904 [dir=back]
+2445266550904 -> 2445266533912[arrowtail=diamond, dir=both, headlabel="parameter 1..*"]
+2445266540520 -> 2445266526360 [dir=back]
+2445266540520 -> 2445266524472 [dir=back]
+2445266534856 -> 2445266540520 [dir=back]
+2445266534856 -> 2445266518808 [dir=back]
+2445266534856 -> 2445266520696 [dir=back]
+2445266534856 -> 2445266532024 [dir=back]
+2445266534856 -> 2445266532968 [dir=back]
+2445266545240 -> 2445266534856 [dir=back]
+
+}

@@ -22,8 +22,12 @@ import sys
 def checkSemantics(model, metamodel):
     modelCommands = model.commands
     inputIDList=[]
+    importedFunctions = []
     for command in modelCommands:
         line,col = model._tx_parser.pos_to_linecol(command._tx_position)
+        if command.__class__.__name__ == "ImportFunction":
+            importedFunctions.append(command.newFunctionName)
+
         if command.__class__.__name__ == "CreateFunction":
             #CHECK REPEATED IDS -> INPUTS
             for inputs in command.parameter:
@@ -36,7 +40,15 @@ def checkSemantics(model, metamodel):
                     message = procMessage(messageError,bcolors.BLUE,lineInput,colInput)
                     raise TextXSemanticError(message,line=line,col=col,filename=model._tx_filename)
                 inputIDList.append((inputValue))
+            #Check if function is not declared before
+            if command.functionName not in importedFunctions:
+                lineInput,colInput = model._tx_parser.pos_to_linecol(command._tx_position)
+                messageError ="Used function was not imported before.\n\t{}".format(
+                                underlineStr(command.functionName ))
+                message = procMessage(messageError,bcolors.BLUE,lineInput,colInput)
+                raise TextXSemanticError(message,line=line,col=col,filename=model._tx_filename)
 
+                
 ################################################################
 
 ##########      Processors      ################################
@@ -108,7 +120,6 @@ class GUI:
                     
                     self.inputType = inputs.inputType
                     if self.inputType == 'OUTPUT':
-                        print("-"*10)
                         self.label = Label(self.frameInner, text=inputs.inputName+':', anchor='w',font=("Calibri", 10, "bold underline"))
                         self.entry = Entry(self.frameInner,state='disabled')
                         self.label.pack(side=LEFT,padx=5, pady=5)

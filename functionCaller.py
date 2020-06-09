@@ -25,13 +25,10 @@ def underlineStr(text):
 
 
 def wrap(func,args):
-    # print("\n"+("#"*56))
-    # print(args)
     argsList = []
     outlist = []
     
     for value in args:
-        # print(value.get()+"\n")
         #ARREGLAR PARA VERIFICAR CAMPO VACIOS DE TODOS ANTES
         if value[1] != "BOOLINPUT":
             if value[0].get()=='' and value[1] != 'OUTPUT':
@@ -136,7 +133,7 @@ def wrap(func,args):
     
     if len(outlist)>1:
         if type(result)!=tuple:
-            raise TextXRuntimeError(message="INCOMPATIBLE: not tuple result of used function")
+            raise TextXRuntimeError(message="INCOMPATIBLE: different number of output results than OUTPUT declarated")
         if len(result) != len(outlist) :
             raise TextXRuntimeError(message="INCOMPATIBLE: different number of values at return and defined outputs")
             
@@ -148,7 +145,7 @@ def wrap(func,args):
     
     if len(outlist)==1:
         if type(result)==tuple: 
-            raise TextXRuntimeError(message="INCOMPATIBLE: not tuple result of used function")
+            raise TextXRuntimeError(message="INCOMPATIBLE: imported function does not return more than one result")
         else:
             outlist[0].configure(state="normal")
             outlist[0].delete(0,"end")

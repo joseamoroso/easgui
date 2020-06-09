@@ -7,8 +7,7 @@ Created on Thu May 14 02:19:04 2020
 from inspect import signature
 import numpy as np
 
-def suma(x,y,boola):
-    print(boola)
+def suma(x,y):
     return x+y,x*y
 
 def calTax(inc,tax,taxEx):
@@ -28,14 +27,4 @@ def arrAvg(array):
 def covMatrix(matrix):
     return np.cov(matrix)
 
-# a = suma
-# lista=[]
-# s = signature(a)
-# s = s.parameters
-# c=4
-# for elem in s:
-#     lista.append(c)
-#     c+=8
-# lista=tuple(lista)
-# v = suma(*lista)
- 
+
