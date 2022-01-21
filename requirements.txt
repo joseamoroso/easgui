@@ -12,7 +12,7 @@ docutils==0.16
 headerparser==0.3.0
 humanfriendly==8.2
 ipykernel==5.2.1
-ipython==7.14.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 isort==4.3.21
 jedi==0.17.0
